@@ -1,0 +1,46 @@
+$support[]=number_format((($d['jumlah_brg']/$totaldata) * 100), 2);
+$imp =  implode(", ",$support);
+ mysqli_query($koneksi, "SET @support1 = ".$imp);
+                    mysqli_query($koneksi, "SET @lolos = ".$lolos);
+INSERT INTO itemset1 (id_proses, item, jumlah,support,lolos)SELECT @id_proses, nama_barang, count(nama_barang) as jumlah_brg, @support1, @lolos from tb_databarang WHERE status = 'aktif' GROUP BY nama_barang
+
+
+$sql_insert = mysqli_query($koneksi, "INSERT INTO itemset1 (id_proses, item, jumlah, support, lolos) SELECT $id_proses AS id_proses, nama_barang, COUNT(nama_barang) AS jumlah_barang,$support1[$i] AS support, $lolosin[$i] AS lolos FROM tb_databarang WHERE status = 'aktif' GROUP BY nama_barang")."<br>";
+						
+
+
+                        SELECT CONCAT (a.item, ', ', b.item) as itemset2, a.item as item1, b.item as item2
+from (itemset1 a, itemset1 b) 
+INNER JOIN tb_databarang data1
+ON a.item = data1.nama_barang
+INNER JOIN tb_databarang data2
+ON b.item = data2.nama_barang
+where a.lolos = 1 and b.lolos = 1 and data1.no_transaksi = data2.no_transaksi and a.item != b.item
+order by a.item
+
+
+select DISTINCT a.nama_barang,a.no_transaksi, b.nama_barang, b.no_transaksi from tb_databarang a, tb_databarang b WHERE a.nama_barang = "BIMOLI 2L" and b.nama_barang = "TONG TJI TEH CELUP JASMINE 25S" and a.no_transaksi = b.no_transaksi
+
+select count(DISTINCT a.nama_barang,a.no_transaksi, b.nama_barang, b.no_transaksi) as jumlah_kombinasi from tb_databarang a, tb_databarang b 
+WHERE a.nama_barang = "BIMOLI 2L" and b.nama_barang = "TONG TJI TEH CELUP JASMINE 25S" and a.no_transaksi = b.no_transaksi
+
+SELECT DISTINCT CONCAT (a.item, ', ', b.item) as itemset2, a.item as item1, b.item as item2
+                    from itemset1 a, itemset1 B
+                    where a.item < b.item and a.lolos = 1 and b.lolos = 1
+                    order by a.item
+
+
+                    select count(DISTINCT aa.nama_barang,aa.no_transaksi, bb.nama_barang, bb.no_transaksi, cc.nama_barang, cc.no_transaksi) as jumlah_kombinasi from tb_databarang aa, tb_databarang bb, tb_databarang cc 
+                    WHERE aa.nama_barang = a.item and bb.nama_barang = b.item and cc.nama_barang = c.item and aa.no_transaksi = bb.no_transaksi = cc.no_transaksi) as komb
+
+
+
+
+
+                    SELECT DISTINCT CONCAT (a.item1, ', ', b.item2, ', ', c.item2) as itemset3, a.item1 as item1, b.item2 as item2, c.item2 as item3,
+                    (
+select count(DISTINCT aa.nama_barang,aa.no_transaksi, bb.nama_barang, bb.no_transaksi, cc.nama_barang, cc.no_transaksi) as jumlah_kombinasi from tb_databarang aa, tb_databarang bb, tb_databarang cc
+WHERE aa.nama_barang = a.item1 and bb.nama_barang = b.item2 and cc.nama_barang = c.item2 and aa.no_transaksi = bb.no_transaksi = cc.no_transaksi) as komb
+from itemset2 a, itemset2 b, itemset2 c
+                                                        where a.item1 < b.item2 and b.item2 < c.item2 and a.item1 < c.item2 and a.lolos = 1 and b.lolos = 1 and c.lolos = 1 and a.id_proses = 2 and b.id_proses = 2 and c.id_proses = 2
+                                                        order by a.item1
